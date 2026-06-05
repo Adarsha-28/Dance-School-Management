@@ -24,6 +24,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/courses", require("./routes/courses"));
 app.use("/api/applications", require("./routes/applications"));
 app.use("/api/feedback", require("./routes/feedback"));
+app.use("/api/enquiries", require("./routes/enquiries"));
 app.use("/api/admin", require("./routes/admin"));
 
 // Welcome route
@@ -42,6 +43,17 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.error(`\n❌ Port ${PORT} is already in use!`);
+    console.error(`👉 Run this command to free the port, then try again:`);
+    console.error(`   npx kill-port ${PORT}\n`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
 });

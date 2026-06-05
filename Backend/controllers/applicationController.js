@@ -65,8 +65,24 @@ const updateApplicationStatus = async (req, res) => {
   }
 };
 
+// Get current user's applications
+const getMyApplications = async (req, res) => {
+  try {
+    const email = req.user.email;
+    if (!email) {
+      return res.status(400).json({ message: "User email not found in token" });
+    }
+    const applications = await Application.find({ email: email.toLowerCase() }).sort({ createdAt: -1 });
+    res.json(applications);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createApplication,
   getApplications,
   updateApplicationStatus,
+  getMyApplications,
 };
+
