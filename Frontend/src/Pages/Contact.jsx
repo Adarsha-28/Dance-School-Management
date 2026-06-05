@@ -53,7 +53,7 @@ function Contact() {
     }
 
     try {
-      const response = await fetch("https://groovix-q6p1.onrendr.com/api/enquiries", {
+      const response = await fetch("https://groovix-78ic.onrendr.com/api/enquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
