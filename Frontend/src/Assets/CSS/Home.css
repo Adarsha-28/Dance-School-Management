@@ -753,3 +753,116 @@ textarea {
     align-items: flex-start;
   }
 }
+
+/* Animations & Form Enhancements */
+.auth-logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.auth-logo {
+  height: 65px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(172, 86, 255, 0.6));
+  animation: pulseLogo 3s infinite ease-in-out;
+}
+
+.form-box {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  backdrop-filter: blur(16px);
+  background: rgba(8, 8, 31, 0.78) !important;
+  border: 1px solid rgba(172, 86, 255, 0.28) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-box:hover {
+  border-color: rgba(208, 45, 255, 0.55) !important;
+  box-shadow: 0 30px 100px rgba(172, 86, 255, 0.18), 0 25px 80px rgba(0, 0, 0, 0.55);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #c934ff !important;
+  box-shadow: 0 0 15px rgba(201, 52, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.checkbox-group input[type="checkbox"] {
+  accent-color: #c934ff;
+  transform: scale(1.15);
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+}
+
+.checkbox-group input[type="checkbox"]:hover {
+  transform: scale(1.25);
+}
+
+@keyframes pulseLogo {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px rgba(172, 86, 255, 0.6));
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 18px rgba(208, 45, 255, 0.95));
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Detailed terms and privacy styling */
+.content-box {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+}
+
+.policy-item h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.policy-item h3::before {
+  content: "✦";
+  color: #c934ff;
+}
+
+.policy-item p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #e2e0ff !important;
+}
+
+.policy-item ul {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.policy-item li {
+  margin: 8px 0;
+  color: #cbd5e1;
+  line-height: 1.6;
+}

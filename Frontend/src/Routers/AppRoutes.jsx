@@ -11,7 +11,7 @@ import FAQ from "../Pages/FAQ";
 import PrivacyPolicy from "../Pages/PrivacyPolicy";
 import TermsConditions from "../Pages/TermsConditions";
 import Application from "../Pages/Application";
-import Enquiry from "../Pages/Enquiry";
+import Feedback from "../Pages/Feedback";
 import Admin from "../Pages/Admin";
 
 function AppRoutes() {
@@ -28,7 +28,7 @@ function AppRoutes() {
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsConditions />} />
       <Route path="/application" element={<Application />} />
-      <Route path="/enquiry" element={<Enquiry />} />
+      <Route path="/feedback" element={<Feedback />} />
       <Route path="/admin" element={<Admin />} />
     </Routes>
   );

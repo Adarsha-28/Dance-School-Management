@@ -53,8 +53,8 @@ function Homepage() {
                 EXPLORE CLASSES
               </Link>
 
-              <Link className="btn secondary" to="/enquiry">
-                ENQUIRE NOW
+              <Link className="btn secondary" to="/feedback">
+                GIVE FEEDBACK
               </Link>
 
               <Link className="btn secondary" to="/application">
@@ -171,6 +171,38 @@ function Homepage() {
             </div>
           </div>
         </section>
+
+        <section className="section light" id="testimonials">
+          <h2 className="section-title">
+            Student & Parent <span>Reviews</span>
+          </h2>
+
+          <div className="grid">
+            <div className="card">
+              <div style={{ color: "#f39c12", marginBottom: "10px", fontSize: "18px" }}>★★★★★</div>
+              <p style={{ fontStyle: "italic", marginBottom: "15px" }}>
+                "The instructors at Dance Academy are incredible! My daughter has built so much confidence in her Hip Hop class. Highly recommend!"
+              </p>
+              <strong style={{ color: "#222" }}>- Priya Sharma (Parent)</strong>
+            </div>
+
+            <div className="card">
+              <div style={{ color: "#f39c12", marginBottom: "10px", fontSize: "18px" }}>★★★★★</div>
+              <p style={{ fontStyle: "italic", marginBottom: "15px" }}>
+                "As a beginner, I was nervous to try Salsa. The instructors broke down the steps perfectly and made it so much fun. I'm hooked!"
+              </p>
+              <strong style={{ color: "#222" }}>- Rohan Kapoor (Student)</strong>
+            </div>
+
+            <div className="card">
+              <div style={{ color: "#f39c12", marginBottom: "10px", fontSize: "18px" }}>★★★★★</div>
+              <p style={{ fontStyle: "italic", marginBottom: "15px" }}>
+                "Excellent classical training! The Bharatanatyam classes are detailed and focus a lot on mudras and rhythm. It's a wonderful space."
+              </p>
+              <strong style={{ color: "#222" }}>- Anjali Mehta (Student)</strong>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="footer">
@@ -197,7 +229,7 @@ function Homepage() {
         <div>
           <h4>Resources</h4>
 
-          <Link to="/enquiry">Enquiry Form</Link>
+          <Link to="/feedback">Feedback Form</Link>
 
           <Link to="/admin">Admin Panel</Link>
 

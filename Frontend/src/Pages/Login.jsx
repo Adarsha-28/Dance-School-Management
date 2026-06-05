@@ -19,7 +19,7 @@ function Login() {
     setIsError(error);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userEmail = email.trim().toLowerCase();
@@ -39,45 +39,51 @@ function Login() {
       return;
     }
 
-    const users = JSON.parse(
-      localStorage.getItem("danceAcademyUsers") || "{}"
-    );
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: userEmail, password }),
+      });
 
-    const userRecord = users[userEmail];
+      const data = await response.json();
 
-    if (!userRecord) {
-      showMessage(
-        "No account found for this email. Please sign up first.",
-        true
+      if (!response.ok) {
+        showMessage(data.message || "Invalid email or password.", true);
+        return;
+      }
+
+      sessionStorage.setItem("danceAcademyLoggedIn", "true");
+      sessionStorage.setItem("danceAcademyToken", data.token);
+      sessionStorage.setItem(
+        "danceAcademyUser",
+        JSON.stringify({
+          name: data.user.name,
+          email: data.user.email,
+          role: data.user.role,
+        })
       );
-      return;
+
+      localStorage.setItem(
+        "danceAcademyLastLoginEmail",
+        userEmail
+      );
+
+      showMessage("Login successful! Redirecting...", false);
+
+      setTimeout(() => {
+        if (data.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+      }, 1200);
+    } catch (error) {
+      console.error("Login error:", error);
+      showMessage("Server connection failed. Please try again later.", true);
     }
-
-    if (userRecord.password !== password) {
-      showMessage("Invalid email or password. Please try again.", true);
-      return;
-    }
-
-    sessionStorage.setItem("danceAcademyLoggedIn", "true");
-
-    sessionStorage.setItem(
-      "danceAcademyUser",
-      JSON.stringify({
-        name: userRecord.name,
-        email: userRecord.email,
-      })
-    );
-
-    localStorage.setItem(
-      "danceAcademyLastLoginEmail",
-      userEmail
-    );
-
-    showMessage("Login successful! Redirecting...", false);
-
-    setTimeout(() => {
-      navigate("/");
-    }, 1200);
   };
 
   return (
@@ -115,11 +121,15 @@ function Login() {
 
       <main className="auth-wrap">
         <form className="form-box" onSubmit={handleSubmit}>
-          <p className="eyebrow">WELCOME BACK</p>
+          <div className="auth-logo-container">
+            <img src={logo} alt="Dance Academy logo" className="auth-logo" />
+          </div>
 
-          <h1>Login</h1>
+          <p className="eyebrow" style={{ textAlign: "center" }}>WELCOME BACK</p>
 
-          <p>
+          <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Login</h1>
+
+          <p style={{ textAlign: "center", marginBottom: "25px" }}>
             Access your classes, schedules, and dance updates.
           </p>
 
@@ -155,7 +165,7 @@ function Login() {
             />
           </div>
 
-          <button className="btn" type="submit">
+          <button className="btn" type="submit" style={{ width: "100%", marginTop: "20px" }}>
             LOGIN
           </button>
 
@@ -167,18 +177,19 @@ function Login() {
                   ? "#c0392b"
                   : "#1a9a12",
                 marginTop: "15px",
+                textAlign: "center"
               }}
             >
               {message}
             </p>
           )}
 
-          <div className="form-links">
-            <Link to="/forgot-password">
+          <div className="form-links" style={{ marginTop: "20px" }}>
+            <Link to="/forgot-password" style={{ textDecoration: "underline" }}>
               Forgot password?
             </Link>
 
-            <Link to="/admin">
+            <Link to="/admin" style={{ textDecoration: "underline" }}>
               Admin Panel
             </Link>
           </div>

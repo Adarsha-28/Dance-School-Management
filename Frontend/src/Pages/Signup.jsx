@@ -10,6 +10,7 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -24,7 +25,7 @@ function Signup() {
     setIsError(error);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userName = name.trim();
@@ -56,55 +57,48 @@ function Signup() {
       return;
     }
 
-    const users = JSON.parse(
-      localStorage.getItem("danceAcademyUsers") || "{}"
-    );
-
-    if (users[userEmail]) {
+    if (!acceptedTerms) {
       showMessage(
-        "This email is already registered. Please login instead.",
+        "You must agree to the Terms & Conditions and Privacy Policy to register.",
         true
       );
       return;
     }
 
-    users[userEmail] = {
-      name: userName,
-      email: userEmail,
-      password: password,
-    };
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: userName,
+          email: userEmail,
+          password: password,
+        }),
+      });
 
-    localStorage.setItem(
-      "danceAcademyUsers",
-      JSON.stringify(users)
-    );
+      const data = await response.json();
 
-    localStorage.setItem(
-      "danceAcademyLastSignupEmail",
-      userEmail
-    );
+      if (!response.ok) {
+        showMessage(data.message || "Registration failed. Please try again.", true);
+        return;
+      }
 
-    sessionStorage.setItem(
-      "danceAcademyLoggedIn",
-      "true"
-    );
+      localStorage.setItem("danceAcademyLastSignupEmail", userEmail);
 
-    sessionStorage.setItem(
-      "danceAcademyUser",
-      JSON.stringify({
-        name: userName,
-        email: userEmail,
-      })
-    );
+      showMessage(
+        "Account created successfully! Redirecting to login...",
+        false
+      );
 
-    showMessage(
-      "Account created successfully! Redirecting to login...",
-      false
-    );
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 1500);
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    } catch (error) {
+      console.error("Signup error:", error);
+      showMessage("Server connection failed. Please try again later.", true);
+    }
   };
 
   return (
@@ -142,11 +136,15 @@ function Signup() {
 
       <main className="auth-wrap">
         <form className="form-box" onSubmit={handleSubmit}>
-          <p className="eyebrow">START DANCING</p>
+          <div className="auth-logo-container">
+            <img src={logo} alt="Dance Academy logo" className="auth-logo" />
+          </div>
 
-          <h1>Signup</h1>
+          <p className="eyebrow" style={{ textAlign: "center" }}>START DANCING</p>
 
-          <p>
+          <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Signup</h1>
+
+          <p style={{ textAlign: "center", marginBottom: "25px" }}>
             Create your account and book your first dance class.
           </p>
 
@@ -198,7 +196,20 @@ function Signup() {
             />
           </div>
 
-          <button className="btn" type="submit">
+          <div className="form-group checkbox-group" style={{ display: "flex", alignItems: "center", gap: "10px", margin: "20px 0" }}>
+            <input
+              id="accept-terms"
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              style={{ width: "auto", cursor: "pointer" }}
+            />
+            <label htmlFor="accept-terms" style={{ margin: 0, fontWeight: "normal", fontSize: "13px", cursor: "pointer", color: "#e2e0ff" }}>
+              I agree to the <Link to="/terms" style={{ color: "#d946ef", textDecoration: "underline" }} target="_blank">Terms & Conditions</Link> and <Link to="/privacy" style={{ color: "#d946ef", textDecoration: "underline" }} target="_blank">Privacy Policy</Link>
+            </label>
+          </div>
+
+          <button className="btn" type="submit" style={{ width: "100%", marginTop: "10px" }}>
             CREATE ACCOUNT
           </button>
 
@@ -211,16 +222,16 @@ function Signup() {
                   : "#1a9a12",
                 marginTop: "15px",
                 fontWeight: "600",
+                textAlign: "center"
               }}
             >
               {message}
             </p>
           )}
 
-          <div className="form-links">
-            <span>Already joined?</span>
-
-            <Link to="/login">
+          <div className="form-links" style={{ justifyContent: "center", marginTop: "20px" }}>
+            <span>Already joined? </span>
+            <Link to="/login" style={{ marginLeft: "5px", textDecoration: "underline" }}>
               Login here
             </Link>
           </div>

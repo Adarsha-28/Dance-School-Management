@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import logo from "../Assets/Images/logo.png";
@@ -11,7 +11,39 @@ import img6 from "../Assets/Images/img6.png";
 import img7 from "../Assets/Images/img7.png";
 import img8 from "../Assets/Images/img8.png";
 
+const imageMap = {
+  "img1.png": img1,
+  "img2.png": img2,
+  "img3.png": img3,
+  "img4.png": img4,
+  "img5.png": img5,
+  "img6.png": img6,
+  "img7.png": img7,
+  "img8.png": img8,
+};
+
 function Courses() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/courses");
+        const data = await response.json();
+        if (response.ok) {
+          setCourses(data);
+        }
+      } catch (err) {
+        console.error("Error fetching courses:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
   return (
     <div className="page">
       <header className="navbar">
@@ -58,121 +90,38 @@ function Courses() {
           </h2>
 
           <div className="grid">
-            <div className="card course-card">
-              <img className="course-img" src={img1} alt="Hip Hop" />
-              <h3>Hip Hop</h3>
-              <p>
-                Learn grooves, footwork, freestyle, musicality, and powerful
-                street-style combinations.
-              </p>
-
-              <div className="course-meta">
-                <span>Beginner to Advanced</span>
-                <span>3 Days / Week</span>
+            {loading ? (
+              <div style={{ textAlign: "center", gridColumn: "span 3", padding: "40px" }}>
+                <h3>Loading Courses...</h3>
               </div>
-            </div>
-
-            <div className="card course-card">
-              <img className="course-img" src={img4} alt="Bharatanatyam" />
-              <h3>Bharatanatyam</h3>
-              <p>
-                Build grace, posture, expressions, mudras, rhythm, and
-                classical performance discipline.
-              </p>
-
-              <div className="course-meta">
-                <span>All Levels</span>
-                <span>Weekend Batch</span>
+            ) : courses.length === 0 ? (
+              <div style={{ textAlign: "center", gridColumn: "span 3", padding: "40px" }}>
+                <h3>No courses found.</h3>
               </div>
-            </div>
+            ) : (
+              courses.map((course) => (
+                <div className="card course-card" key={course._id}>
+                  <img
+                    className="course-img"
+                    src={imageMap[course.image] || img1}
+                    alt={course.title}
+                  />
+                  <h3>{course.title}</h3>
+                  <p>{course.description}</p>
 
-            <div className="card course-card">
-              <img className="course-img" src={img2} alt="Contemporary" />
-              <h3>Contemporary</h3>
-              <p>
-                Explore fluid movement, body control, floor work, emotion, and
-                creative storytelling.
-              </p>
+                  <div className="course-meta">
+                    <span>{course.level}</span>
+                    <span>{course.timing}</span>
+                  </div>
 
-              <div className="course-meta">
-                <span>Intermediate</span>
-                <span>Evening Batch</span>
-              </div>
-            </div>
-
-            <div className="card course-card">
-              <img className="course-img" src={img3} alt="Salsa" />
-              <h3>Salsa</h3>
-              <p>
-                Practice partner work, turns, rhythm, timing, basic steps, and
-                confident social dancing.
-              </p>
-
-              <div className="course-meta">
-                <span>Beginner Friendly</span>
-                <span>2 Days / Week</span>
-              </div>
-            </div>
-
-            <div className="card course-card">
-              <img className="course-img" src={img5} alt="Zumba" />
-              <h3>Zumba</h3>
-              <p>
-                Enjoy dance fitness with fun choreography, cardio movement,
-                stamina, and full-body energy.
-              </p>
-
-              <div className="course-meta">
-                <span>Fitness Batch</span>
-                <span>Morning / Evening</span>
-              </div>
-            </div>
-
-            <div className="card course-card">
-              <img className="course-img" src={img6} alt="Kathak" />
-              <h3>Kathak</h3>
-              <p>
-                Learn footwork, spins, hand gestures, rhythm cycles, and
-                graceful classical presentation.
-              </p>
-
-              <div className="course-meta">
-                <span>Foundation Level</span>
-                <span>Weekend Batch</span>
-              </div>
-            </div>
-
-            <div className="card course-card">
-              <img className="course-img" src={img7} alt="Kids Dance" />
-              <h3>Kids Dance</h3>
-              <p>
-                A cheerful class for children with basic rhythm, coordination,
-                confidence, and performance practice.
-              </p>
-
-              <div className="course-meta">
-                <span>Ages 5 to 12</span>
-                <span>After School</span>
-              </div>
-            </div>
-
-            <div className="card course-card">
-              <img
-                className="course-img"
-                src={img8}
-                alt="Wedding Choreography"
-              />
-              <h3>Wedding Choreography</h3>
-              <p>
-                Custom choreography for solo, couple, family, and group
-                performances for special events.
-              </p>
-
-              <div className="course-meta">
-                <span>Custom Plan</span>
-                <span>Private Sessions</span>
-              </div>
-            </div>
+                  <div style={{ marginTop: "15px", borderTop: "1px solid rgba(255, 255, 255, 0.12)", paddingTop: "12px", fontSize: "13px" }}>
+                    <p style={{ margin: "5px 0" }}><strong>Schedule:</strong> {course.timing}</p>
+                    <p style={{ margin: "5px 0" }}><strong>Fees:</strong> {course.fees}</p>
+                    <p style={{ margin: "5px 0", color: "#2ecc71" }}><strong>Available Seats:</strong> {course.seats} left</p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </section>
       </main>
@@ -194,7 +143,7 @@ function Courses() {
 
         <div>
           <h4>Resources</h4>
-          <Link to="/enquiry">Enquiry Form</Link>
+          <Link to="/feedback">Feedback Form</Link>
           <Link to="/admin">Admin Panel</Link>
           <Link to="/privacy">Privacy Policy</Link>
           <Link to="/terms">Terms and Conditions</Link>
