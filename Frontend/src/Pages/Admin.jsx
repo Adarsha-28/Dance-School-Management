@@ -85,7 +85,7 @@ function Admin() {
 
   const handleApplicationStatus = async (id, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/applications/${id}/status`, {
+      const response = await fetch(`https://groovix-78ic.onrender.com/api/applications/${id}/status`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -125,7 +125,7 @@ function Admin() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/courses/${id}/seats`, {
+      const response = await fetch(`https://groovix-78ic.onrender.com/api/courses/${id}/seats`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
