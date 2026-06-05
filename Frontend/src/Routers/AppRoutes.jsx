@@ -13,6 +13,7 @@ import TermsConditions from "../Pages/TermsConditions";
 import Application from "../Pages/Application";
 import Feedback from "../Pages/Feedback";
 import Admin from "../Pages/Admin";
+import Profile from "../Pages/Profile";
 
 function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ function AppRoutes() {
       <Route path="/application" element={<Application />} />
       <Route path="/feedback" element={<Feedback />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

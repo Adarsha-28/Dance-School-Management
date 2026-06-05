@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 
-import logo from "../Assets/Images/logo.png";
 import img1 from "../Assets/Images/img1.png";
 import img2 from "../Assets/Images/img2.png";
 import img3 from "../Assets/Images/img3.png";
@@ -46,26 +46,7 @@ function Courses() {
 
   return (
     <div className="page">
-      <header className="navbar">
-        <Link className="brand" to="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </Link>
-
-        <nav className="nav-links">
-          <Link to="/">HOME</Link>
-          <Link to="/about">ABOUT</Link>
-          <Link className="active" to="/courses">
-            COURSES
-          </Link>
-          <Link to="/contact">CONTACT</Link>
-          <Link className="btn" to="/signup">
-            JOIN NOW
-          </Link>
-        </nav>
-      </header>
+      <Navbar />
 
       <main>
         <section className="content-page">

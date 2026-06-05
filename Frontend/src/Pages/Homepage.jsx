@@ -1,38 +1,17 @@
 import React from "react";
 import "../Assets/CSS/Home.css";
-import logo from "../Assets/Images/logo.png";
+import Navbar from "../Components/Navbar";
 import First from "../Assets/Images/First.png";
 import img1 from "../Assets/Images/img1.png";
 import img4 from "../Assets/Images/img4.png";
 import img2 from "../Assets/Images/img2.png";
 
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Homepage() {
   return (
     <div className="page">
-      <header className="navbar">
-        <Link className="brand" to="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </Link>
-
-        <nav className="nav-links">
-          <NavLink to="/">HOME</NavLink>
-
-          <NavLink to="/about">ABOUT</NavLink>
-
-          <NavLink to="/courses">COURSES</NavLink>
-
-          <NavLink to="/contact">CONTACT</NavLink>
-
-          <Link className="btn" to="/signup">
-            JOIN NOW
-          </Link>
-        </nav>
-      </header>
+      <Navbar />
 
       <main>
         <section className="hero">

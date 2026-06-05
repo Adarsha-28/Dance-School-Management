@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import logo from "../Assets/Images/logo.png";
+import { Link, useNavigate } from "react-router-dom";
 import "../Assets/CSS/Home.css";
+import Navbar from "../Components/Navbar";
 
 function Admin() {
   const navigate = useNavigate();
@@ -149,44 +149,11 @@ function Admin() {
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("danceAcademyLoggedIn");
-    sessionStorage.removeItem("danceAcademyToken");
-    sessionStorage.removeItem("danceAcademyUser");
-    navigate("/login");
-  };
+
 
   return (
     <div className="page">
-      <header className="navbar">
-        <Link className="brand" to="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </Link>
-
-        <nav className="nav-links">
-          <NavLink to="/">HOME</NavLink>
-
-          <NavLink to="/admin" className="active">
-            ADMIN
-          </NavLink>
-
-          <button
-            onClick={handleLogout}
-            className="btn"
-            style={{
-              background: "transparent",
-              border: "1px solid var(--accent, #e74c3c)",
-              color: "var(--accent, #e74c3c)",
-              cursor: "pointer",
-            }}
-          >
-            LOGOUT
-          </button>
-        </nav>
-      </header>
+      <Navbar />
 
       <main className="admin-shell">
         <aside className="admin-sidebar">

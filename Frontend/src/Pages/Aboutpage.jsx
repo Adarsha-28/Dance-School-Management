@@ -1,30 +1,11 @@
 import React from "react";
 import "../Assets/CSS/Home.css";
-import logo from "../Assets/Images/logo.png";
-import "../Assets/CSS/Home.css";
-import { Link } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 
 function Aboutpage() {
   return (
     <div className="page">
-      <header className="navbar">
-        <a className="brand" href="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </a>
-
-        <nav className="nav-links">
-          <Link to="/">HOME</Link>
-          <Link className="active" to="/about">ABOUT</Link>
-          <Link to="/courses">COURSES</Link>
-          <Link to="/contact">CONTACT</Link>
-          <Link className="btn" to="/signup">
-            JOIN NOW
-          </Link>
-        </nav>
-      </header>
+      <Navbar />
 
       <main className="content-page">
         <section className="content-box">

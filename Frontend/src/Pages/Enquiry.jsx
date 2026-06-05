@@ -55,7 +55,7 @@ function Enquiry() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/enquiries", {
+      const response = await fetch("https://groovix-q6p1.onrender.com/api/enquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../Assets/Images/logo.png";
+import Navbar from "../Components/Navbar";
 import "../Assets/CSS/Home.css";
 
 function ForgotPassword() {
@@ -20,24 +20,7 @@ function ForgotPassword() {
 
   return (
     <div className="page">
-      <header className="navbar">
-        <Link className="brand" to="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </Link>
-
-        <nav className="nav-links">
-          <Link to="/">HOME</Link>
-          <Link to="/about">ABOUT</Link>
-          <Link to="/courses">COURSES</Link>
-          <Link to="/contact">CONTACT</Link>
-          <Link className="btn" to="/signup">
-            JOIN NOW
-          </Link>
-        </nav>
-      </header>
+      <Navbar />
 
       <main className="auth-wrap">
         <form className="form-box" onSubmit={handleSubmit}>
