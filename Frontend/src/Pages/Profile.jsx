@@ -3,13 +3,26 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import "../Assets/CSS/Home.css";
 import "../Assets/CSS/Profile.css";
+import { getApiUrl } from "../utils/api";
 
 function Profile() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [applications, setApplications] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Payment portal states
+  const [paymentApp, setPaymentApp] = useState(null);
+  const [submittingPayment, setSubmittingPayment] = useState(false);
+  const [paymentSuccessReceipt, setPaymentSuccessReceipt] = useState(null);
+  const [cardDetails, setCardDetails] = useState({
+    cardholderName: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
+  });
 
   useEffect(() => {
     const token = sessionStorage.getItem("danceAcademyToken");
@@ -23,7 +36,7 @@ function Profile() {
     const fetchProfileData = async () => {
       try {
         // Fetch User Details from backend
-        const userRes = await fetch("https://groovix-78ic.onrender.com/api/auth/me", {
+        const userRes = await fetch(getApiUrl("api/auth/me"), {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -37,7 +50,7 @@ function Profile() {
         setUser(userData);
 
         // Fetch Applications from backend
-        const appsRes = await fetch("https://groovix-78ic.onrender.com/api/applications/my", {
+        const appsRes = await fetch(getApiUrl("api/applications/my"), {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -46,6 +59,13 @@ function Profile() {
         if (appsRes.ok) {
           const appsData = await appsRes.json();
           setApplications(appsData);
+        }
+
+        // Fetch Courses to dynamically lookup course fees
+        const coursesRes = await fetch(getApiUrl("api/courses"));
+        if (coursesRes.ok) {
+          const coursesData = await coursesRes.json();
+          setCourses(coursesData);
         }
       } catch (err) {
         console.error(err);
@@ -64,6 +84,59 @@ function Profile() {
 
     fetchProfileData();
   }, [navigate]);
+
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
+    if (!cardDetails.cardNumber || !cardDetails.expiry || !cardDetails.cvv || !cardDetails.cardholderName) {
+      alert("Please fill in all card details.");
+      return;
+    }
+
+    setSubmittingPayment(true);
+
+    try {
+      const token = sessionStorage.getItem("danceAcademyToken");
+      const res = await fetch(getApiUrl(`api/applications/${paymentApp.app._id}/pay`), {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.ok) {
+        const updatedApp = await res.json();
+        // Update local applications list
+        setApplications(applications.map(a => a._id === updatedApp._id ? { ...a, paid: true } : a));
+
+        // Create transaction receipt
+        const receipt = {
+          transactionId: "TXN-" + Math.floor(1000000000 + Math.random() * 9000000000),
+          course: paymentApp.app.course,
+          batch: paymentApp.app.batch,
+          fee: paymentApp.fee,
+          date: new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          cardholder: cardDetails.cardholderName,
+        };
+
+        setPaymentSuccessReceipt(receipt);
+      } else {
+        const errData = await res.json();
+        alert(`Payment failed: ${errData.message}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error contacting the backend server during payment.");
+    } finally {
+      setSubmittingPayment(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -208,6 +281,60 @@ function Profile() {
                         <span>Experience details:</span>
                         <p>{app.experience}</p>
                       </div>
+
+                      {/* Course Fee Payment Block */}
+                      {app.status === "Approved" && (
+                        <div style={{
+                          marginTop: "15px",
+                          paddingTop: "15px",
+                          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "10px"
+                        }}>
+                          <div>
+                            <span style={{ fontSize: "11px", color: "#b983ff", textTransform: "uppercase", letterSpacing: "0.5px" }}>Course Tuition Fee</span>
+                            <div style={{ marginTop: "4px" }}>
+                              {app.paid ? (
+                                <span style={{ color: "#22c55e", fontWeight: "700", display: "flex", alignItems: "center", gap: "5px", fontSize: "14px" }}>
+                                  ✓ Paid & Enrolled
+                                </span>
+                              ) : (
+                                <span style={{ color: "#f59e0b", fontWeight: "700", fontSize: "14px" }}>
+                                  ⚠️ Unpaid
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          {!app.paid && (
+                            <button
+                              onClick={() => {
+                                const matchedCourse = courses.find(c => c.title.toLowerCase() === app.course.toLowerCase());
+                                const fee = matchedCourse ? matchedCourse.fees : "₹3,500 / Month";
+                                setPaymentApp({ app, fee });
+                                setCardDetails({
+                                  cardholderName: user?.name || "",
+                                  cardNumber: "",
+                                  expiry: "",
+                                  cvv: "",
+                                });
+                                setPaymentSuccessReceipt(null);
+                              }}
+                              className="btn"
+                              style={{
+                                padding: "8px 16px",
+                                fontSize: "12px",
+                                margin: 0,
+                                background: "linear-gradient(135deg, #7a25ff, #d02dff)",
+                              }}
+                            >
+                              Pay Course Fee
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -216,6 +343,209 @@ function Profile() {
           </section>
         </div>
       </main>
+
+      {/* Course Payment Modal Overlay */}
+      {paymentApp && (
+        <div className="modal-overlay" onClick={() => { if (!submittingPayment) setPaymentApp(null); }}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "520px", position: "relative" }}>
+            {!submittingPayment && (
+              <button className="modal-close" onClick={() => setPaymentApp(null)}>
+                &times;
+              </button>
+            )}
+
+            {paymentSuccessReceipt ? (
+              // Payment Success Receipt View
+              <div style={{ textAlign: "center", padding: "10px" }}>
+                <div style={{
+                  width: "70px",
+                  height: "70px",
+                  borderRadius: "50%",
+                  background: "rgba(34, 197, 94, 0.15)",
+                  border: "2px solid #22c55e",
+                  color: "#22c55e",
+                  fontSize: "36px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 20px auto",
+                }}>
+                  ✓
+                </div>
+                <h2 style={{ color: "#22c55e", marginBottom: "5px" }}>Payment Successful!</h2>
+                <p style={{ color: "#bdb9d9", fontSize: "14px", marginTop: 0 }}>Thank you for your enrollment. Your seat is confirmed.</p>
+
+                <div style={{
+                  background: "rgba(0, 0, 0, 0.25)",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  margin: "20px 0",
+                  textAlign: "left",
+                  border: "1px solid rgba(255, 255, 255, 0.05)",
+                  fontSize: "14px",
+                  lineHeight: "1.6"
+                }}>
+                  <h3 style={{ margin: "0 0 15px 0", fontSize: "16px", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "10px", color: "#ffffff" }}>
+                    Academy Fee Receipt
+                  </h3>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                    <span style={{ color: "#bdb9d9" }}>Course Name:</span>
+                    <strong style={{ color: "#ffffff" }}>{paymentSuccessReceipt.course}</strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                    <span style={{ color: "#bdb9d9" }}>Batch Schedule:</span>
+                    <strong style={{ color: "#ffffff" }}>{paymentSuccessReceipt.batch}</strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                    <span style={{ color: "#bdb9d9" }}>Paid Amount:</span>
+                    <strong style={{ color: "#d946ef" }}>{paymentSuccessReceipt.fee}</strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                    <span style={{ color: "#bdb9d9" }}>Paid By:</span>
+                    <strong style={{ color: "#ffffff" }}>{paymentSuccessReceipt.cardholder}</strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                    <span style={{ color: "#bdb9d9" }}>Payment Date:</span>
+                    <strong style={{ color: "#ffffff" }}>{paymentSuccessReceipt.date}</strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed rgba(255,255,255,0.12)" }}>
+                    <span style={{ color: "#bdb9d9" }}>Transaction ID:</span>
+                    <code style={{ color: "#b983ff", fontWeight: "bold" }}>{paymentSuccessReceipt.transactionId}</code>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setPaymentApp(null)} 
+                  className="btn"
+                  style={{ width: "100%", marginTop: "10px" }}
+                >
+                  Close & Return
+                </button>
+              </div>
+            ) : (
+              // Payment Submission Form View
+              <div>
+                <h2 style={{ marginBottom: "5px", background: "linear-gradient(135deg, #ffffff, #d946ef)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  Course Fee Payment
+                </h2>
+                <p style={{ color: "#bdb9d9", fontSize: "14px", marginTop: 0, marginBottom: "20px" }}>
+                  Complete your payment for <strong>{paymentApp.app.course}</strong> course.
+                </p>
+
+                <div style={{
+                  background: "rgba(255, 255, 255, 0.03)",
+                  borderRadius: "8px",
+                  padding: "12px 18px",
+                  marginBottom: "20px",
+                  borderLeft: "4px solid #d946ef",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}>
+                  <div>
+                    <span style={{ fontSize: "11px", color: "#bdb9d9", textTransform: "uppercase" }}>Amount Due</span>
+                    <h3 style={{ margin: "2px 0 0 0", color: "#ffffff", fontSize: "18px" }}>{paymentApp.fee}</h3>
+                  </div>
+                  <span style={{
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    background: "rgba(245, 158, 11, 0.15)",
+                    border: "1px solid rgba(245, 158, 11, 0.3)",
+                    color: "#f59e0b",
+                    fontSize: "11px",
+                    fontWeight: "bold"
+                  }}>
+                    PENDING FEE
+                  </span>
+                </div>
+
+                <form onSubmit={handlePaymentSubmit} style={{ display: "grid", gap: "12px" }}>
+                  <div>
+                    <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold", fontSize: "12px" }}>Cardholder Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter name as on card"
+                      value={cardDetails.cardholderName}
+                      onChange={(e) => setCardDetails({ ...cardDetails, cardholderName: e.target.value })}
+                      style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid rgba(255, 255, 255, 0.15)", backgroundColor: "rgba(255, 255, 255, 0.05)", color: "white" }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold", fontSize: "12px" }}>Card Number</label>
+                    <input
+                      type="text"
+                      required
+                      maxLength="19"
+                      placeholder="1234 5678 9012 3456"
+                      value={cardDetails.cardNumber}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim();
+                        setCardDetails({ ...cardDetails, cardNumber: val });
+                      }}
+                      style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid rgba(255, 255, 255, 0.15)", backgroundColor: "rgba(255, 255, 255, 0.05)", color: "white" }}
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
+                    <div>
+                      <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold", fontSize: "12px" }}>Expiry Date</label>
+                      <input
+                        type="text"
+                        required
+                        maxLength="5"
+                        placeholder="MM/YY"
+                        value={cardDetails.expiry}
+                        onChange={(e) => {
+                          let val = e.target.value.replace(/\D/g, "");
+                          if (val.length > 2) {
+                            val = val.slice(0, 2) + "/" + val.slice(2, 4);
+                          }
+                          setCardDetails({ ...cardDetails, expiry: val });
+                        }}
+                        style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid rgba(255, 255, 255, 0.15)", backgroundColor: "rgba(255, 255, 255, 0.05)", color: "white" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold", fontSize: "12px" }}>CVV</label>
+                      <input
+                        type="password"
+                        required
+                        maxLength="3"
+                        placeholder="123"
+                        value={cardDetails.cvv}
+                        onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value.replace(/\D/g, "") })}
+                        style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid rgba(255, 255, 255, 0.15)", backgroundColor: "rgba(255, 255, 255, 0.05)", color: "white" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: "10px" }}>
+                    <button
+                      type="submit"
+                      disabled={submittingPayment}
+                      className="btn"
+                      style={{
+                        width: "100%",
+                        padding: "12px",
+                        fontSize: "14px",
+                        background: "linear-gradient(135deg, #7a25ff, #d02dff)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "10px"
+                      }}
+                    >
+                      {submittingPayment ? "Processing..." : `Pay Fee (${paymentApp.fee})`}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

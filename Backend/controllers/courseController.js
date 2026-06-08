@@ -53,4 +53,31 @@ const updateCourseSeats = async (req, res) => {
   }
 };
 
-module.exports = { getCourses, createCourse, updateCourseSeats };
+// Update a course (Admin only)
+const updateCourse = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, level, timing, image, fees, seats } = req.body;
+
+  try {
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    if (title !== undefined) course.title = title;
+    if (description !== undefined) course.description = description;
+    if (level !== undefined) course.level = level;
+    if (timing !== undefined) course.timing = timing;
+    if (image !== undefined) course.image = image;
+    if (fees !== undefined) course.fees = fees;
+    if (seats !== undefined) course.seats = Number(seats);
+
+    const updatedCourse = await course.save();
+    res.json(updatedCourse);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports = { getCourses, createCourse, updateCourseSeats, updateCourse };

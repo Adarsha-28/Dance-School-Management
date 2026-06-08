@@ -63,9 +63,11 @@ function Navbar() {
           COURSES
         </NavLink>
 
-        <NavLink to="/contact">
-          CONTACT
-        </NavLink>
+        {user?.role !== "admin" && (
+          <NavLink to="/contact">
+            CONTACT
+          </NavLink>
+        )}
 
         {isLoggedIn ? (
           <>
@@ -74,14 +76,16 @@ function Navbar() {
                 ADMIN PANEL
               </NavLink>
             )}
-            <NavLink to="/profile">
-              PROFILE
-            </NavLink>
+            {user?.role !== "admin" && (
+              <NavLink to="/profile" className="profile-icon-link" title="Profile">
+                👤
+              </NavLink>
+            )}
             <button
               className="btn logout-btn"
               onClick={handleLogout}
               style={{
-                background: "linear-gradient(135deg, #c0392b, #e74c3c)",
+                background: "linear-gradient(135deg, #7a25ff, #d02dff)",
                 marginLeft: "8px",
                 border: "none"
               }}
@@ -91,9 +95,6 @@ function Navbar() {
           </>
         ) : (
           <>
-            <NavLink to="/login">
-              LOGIN
-            </NavLink>
             <Link className="btn" to="/signup">
               JOIN NOW
             </Link>

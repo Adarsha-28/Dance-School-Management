@@ -2,11 +2,16 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, { dbName: "DanceAcademyDB" });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    const uri = process.env.MONGODB_URI;
+    console.log("Connecting to MongoDB Atlas...");
+    const conn = await mongoose.connect(uri, { 
+      dbName: "DanceAcademyDB",
+      tlsAllowInvalidCertificates: true // Bypass local TLS validation failures
+    });
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     console.log(`Database: ${conn.connection.name}`);
   } catch (error) {
-    console.error(`Database connection error: ${error.message}`);
+    console.error(`❌ Database connection error: ${error.message}`);
     process.exit(1);
   }
 };

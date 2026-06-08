@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Assets/CSS/Home.css";
 import Navbar from "../Components/Navbar";
+import { getApiUrl } from "../utils/api";
 
 function Feedback() {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ function Feedback() {
     }
 
     try {
-      const response = await fetch("https://groovix-78ic.onrender.com/api/feedback", {
+      const response = await fetch(getApiUrl("api/feedback"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

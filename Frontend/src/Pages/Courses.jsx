@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import { getApiUrl } from "../utils/api";
 
 import img1 from "../Assets/Images/img1.png";
 import img2 from "../Assets/Images/img2.png";
@@ -26,11 +27,20 @@ const imageMap = {
 function Courses() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  const handleOpenModal = (course) => {
+    setSelectedCourse(course);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCourse(null);
+  };
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("https://groovix-78ic.onrender.com/api/courses");
+        const response = await fetch(getApiUrl("api/courses"));
         const data = await response.json();
         if (response.ok) {
           setCourses(data);
@@ -92,18 +102,15 @@ function Courses() {
                     }
                     alt={course.title}
                   />
-                  <h3>{course.title}</h3>
-                  <p>{course.description}</p>
-
-                  <div className="course-meta">
-                    <span>{course.level}</span>
-                    <span>{course.timing}</span>
-                  </div>
-
-                  <div style={{ marginTop: "15px", borderTop: "1px solid rgba(255, 255, 255, 0.12)", paddingTop: "12px", fontSize: "13px" }}>
-                    <p style={{ margin: "5px 0" }}><strong>Schedule:</strong> {course.timing}</p>
-                    <p style={{ margin: "5px 0" }}><strong>Fees:</strong> {course.fees}</p>
-                    <p style={{ margin: "5px 0", color: "#2ecc71" }}><strong>Available Seats:</strong> {course.seats} left</p>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginTop: "15px" }}>
+                    <h3 style={{ margin: 0 }}>{course.title}</h3>
+                    <button
+                      className="info-btn"
+                      onClick={() => handleOpenModal(course)}
+                      title="View Details"
+                    >
+                      View Details
+                    </button>
                   </div>
                 </div>
               ))
@@ -111,6 +118,60 @@ function Courses() {
           </div>
         </section>
       </main>
+
+      {selectedCourse && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={handleCloseModal}>
+              &times;
+            </button>
+            <div className="modal-grid">
+              <img
+                className="modal-img"
+                src={
+                  (selectedCourse.title && selectedCourse.title.toLowerCase().includes("contemporary"))
+                    ? contemporaryImg
+                    : (imageMap[selectedCourse.image] || img1)
+                }
+                alt={selectedCourse.title}
+              />
+              <div className="modal-details">
+                <h2>{selectedCourse.title}</h2>
+                <p className="modal-desc">{selectedCourse.description}</p>
+
+                <div className="modal-meta-grid">
+                  <div className="modal-meta-item">
+                    <strong>Level</strong>
+                    <span>{selectedCourse.level}</span>
+                  </div>
+                  <div className="modal-meta-item">
+                    <strong>Timing</strong>
+                    <span>{selectedCourse.timing}</span>
+                  </div>
+                  <div className="modal-meta-item">
+                    <strong>Fees</strong>
+                    <span>{selectedCourse.fees}</span>
+                  </div>
+                  <div className="modal-meta-item">
+                    <strong>Available Seats</strong>
+                    <span style={{ color: "#2ecc71", fontWeight: "bold" }}>
+                      {selectedCourse.seats} left
+                    </span>
+                  </div>
+                </div>
+
+                <Link
+                  className="btn"
+                  to="/application"
+                  style={{ marginTop: "25px", display: "inline-block", textDecoration: "none", textAlign: "center" }}
+                >
+                  APPLY NOW
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="footer">
         <div>

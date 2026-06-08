@@ -79,10 +79,36 @@ const getMyApplications = async (req, res) => {
   }
 };
 
+// Pay for course fee
+const payApplicationFee = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const application = await Application.findById(id);
+
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    // Verify application owner
+    if (application.email.toLowerCase() !== req.user.email.toLowerCase()) {
+      return res.status(403).json({ message: "Not authorized to pay for this application" });
+    }
+
+    application.paid = true;
+    const updatedApplication = await application.save();
+
+    res.json(updatedApplication);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createApplication,
   getApplications,
   updateApplicationStatus,
   getMyApplications,
+  payApplicationFee,
 };
 

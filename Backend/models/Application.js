@@ -47,6 +47,10 @@ const applicationSchema = new mongoose.Schema(
       enum: ["Pending", "Approved", "Follow Up"],
       default: "Pending",
     },
+    paid: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../Assets/CSS/Home.css";
 import logo from "../Assets/Images/logo.png";
 import Navbar from "../Components/Navbar";
+import { getApiUrl } from "../utils/api";
 
 function Signup() {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ function Signup() {
     }
 
     try {
-      const response = await fetch("https://groovix-78ic.onrender.com/api/auth/register", {
+      const response = await fetch(getApiUrl("api/auth/register"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

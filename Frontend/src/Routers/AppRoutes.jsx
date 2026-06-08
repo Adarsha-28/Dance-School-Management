@@ -12,7 +12,13 @@ import PrivacyPolicy from "../Pages/PrivacyPolicy";
 import TermsConditions from "../Pages/TermsConditions";
 import Application from "../Pages/Application";
 import Feedback from "../Pages/Feedback";
-import Admin from "../Pages/Admin";
+import AdminDashboard from "../Pages/AdminDashboard";
+import AdminAdmins from "../Pages/AdminAdmins";
+import AdminApplications from "../Pages/AdminApplications";
+import AdminJoinedStudents from "../Pages/AdminJoinedStudents";
+import AdminFeedback from "../Pages/AdminFeedback";
+import AdminCourses from "../Pages/AdminCourses";
+import AdminBatches from "../Pages/AdminBatches";
 import Profile from "../Pages/Profile";
 import Enquiry from "../Pages/Enquiry";
 
@@ -32,7 +38,14 @@ function AppRoutes() {
       <Route path="/application" element={<Application />} />
       <Route path="/feedback" element={<Feedback />} />
       <Route path="/enquiry" element={<Enquiry />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/admins" element={<AdminAdmins />} />
+      <Route path="/admin/applications" element={<AdminApplications />} />
+      <Route path="/admin/joined-students" element={<AdminJoinedStudents />} />
+      <Route path="/admin/feedback" element={<AdminFeedback />} />
+      <Route path="/admin/courses" element={<AdminCourses />} />
+      <Route path="/admin/batches" element={<AdminBatches />} />
       <Route path="/profile" element={<Profile />} />
     </Routes>
   );

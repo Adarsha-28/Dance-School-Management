@@ -1,4 +1,7 @@
-// ─── 1. Load Environment Variables FIRST (before anything else) ──────────────
+// ─── 1. Configure DNS resolver for Atlas SRV records & Load Environment Variables ───
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -25,6 +28,7 @@ app.use("/api/applications", require("./routes/applications"));
 app.use("/api/feedback", require("./routes/feedback"));
 app.use("/api/enquiries", require("./routes/enquiries"));
 app.use("/api/admin", require("./routes/admin"));
+app.use("/api/users", require("./routes/users"));
 
 // ─── 7. Root Health Check Route ───────────────────────────────────────────────
 app.get("/", (req, res) => {

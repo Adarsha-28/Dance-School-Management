@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Assets/CSS/Home.css";
 import Navbar from "../Components/Navbar";
+import { getApiUrl } from "../utils/api";
 
 function Application() {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ function Application() {
     }
 
     try {
-      const response = await fetch("https://groovix-78ic.onrender.com/api/applications", {
+      const response = await fetch(getApiUrl("api/applications"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
