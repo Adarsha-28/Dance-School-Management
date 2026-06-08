@@ -10,6 +10,7 @@ import img5 from "../Assets/Images/img5.png";
 import img6 from "../Assets/Images/img6.png";
 import img7 from "../Assets/Images/img7.png";
 import img8 from "../Assets/Images/img8.png";
+import contemporaryImg from "../Assets/Images/about_dance_class.png";
 
 const imageMap = {
   "img1.png": img1,
@@ -84,7 +85,11 @@ function Courses() {
                 <div className="card course-card" key={course._id}>
                   <img
                     className="course-img"
-                    src={imageMap[course.image] || img1}
+                    src={
+                      (course.title && course.title.toLowerCase().includes("contemporary"))
+                        ? contemporaryImg
+                        : (imageMap[course.image] || img1)
+                    }
                     alt={course.title}
                   />
                   <h3>{course.title}</h3>

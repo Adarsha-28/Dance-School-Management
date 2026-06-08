@@ -188,6 +188,11 @@ h2 span {
   gap: 18px;
 }
 
+/* Ensure grid items stretch to equal height */
+.grid {
+  align-items: stretch;
+}
+
 .grid.two {
   grid-template-columns: repeat(2, 1fr);
 }
@@ -206,16 +211,24 @@ h2 span {
 
 .course-img {
   width: 100%;
-  height: 165px;
+  height: 180px;
+  aspect-ratio: 16/9;
   object-fit: cover;
   border-radius: 7px;
   margin-bottom: 14px;
-
 }
 
 .course-card {
   display: flex;
   flex-direction: column;
+  flex: 1;
+}
+
+/* Make sure the card container stretches so footers align */
+.grid > .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .course-card h3 {

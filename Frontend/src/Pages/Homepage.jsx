@@ -4,7 +4,7 @@ import Navbar from "../Components/Navbar";
 import First from "../Assets/Images/First.png";
 import img1 from "../Assets/Images/img1.png";
 import img4 from "../Assets/Images/img4.png";
-import img2 from "../Assets/Images/img2.png";
+import contemporaryImg from "../Assets/Images/about_dance_class.png";
 
 import { Link } from "react-router-dom";
 
@@ -104,7 +104,7 @@ function Homepage() {
             <div className="card">
               <img
                 className="course-img"
-                src={img2}
+                src={contemporaryImg}
                 alt="Contemporary"
               />
 
