@@ -14,6 +14,7 @@ import Application from "../Pages/Application";
 import Feedback from "../Pages/Feedback";
 import Admin from "../Pages/Admin";
 import Profile from "../Pages/Profile";
+import Enquiry from "../Pages/Enquiry";
 
 function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ function AppRoutes() {
       <Route path="/terms" element={<TermsConditions />} />
       <Route path="/application" element={<Application />} />
       <Route path="/feedback" element={<Feedback />} />
+      <Route path="/enquiry" element={<Enquiry />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/profile" element={<Profile />} />
     </Routes>

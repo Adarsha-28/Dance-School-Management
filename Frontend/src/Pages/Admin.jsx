@@ -48,19 +48,19 @@ function Admin() {
         };
 
         // Fetch Stats
-        const statsRes = await fetch("http://localhost:5000/api/admin/dashboard", { headers });
+        const statsRes = await fetch("https://groovix-78ic.onrender.com/api/admin/dashboard", { headers });
         const statsData = await statsRes.json();
 
         // Fetch Applications
-        const appsRes = await fetch("http://localhost:5000/api/applications", { headers });
+        const appsRes = await fetch("https://groovix-78ic.onrender.com/api/applications", { headers });
         const appsData = await appsRes.json();
 
         // Fetch Feedbacks
-        const feedbacksRes = await fetch("http://localhost:5000/api/feedback", { headers });
+        const feedbacksRes = await fetch("https://groovix-78ic.onrender.com/api/feedback", { headers });
         const feedbacksData = await feedbacksRes.json();
 
         // Fetch Courses
-        const coursesRes = await fetch("http://localhost:5000/api/courses");
+        const coursesRes = await fetch("https://groovix-78ic.onrender.com/api/courses");
         const coursesData = await coursesRes.json();
 
         if (statsRes.ok && appsRes.ok && feedbacksRes.ok && coursesRes.ok) {
@@ -85,7 +85,7 @@ function Admin() {
 
   const handleApplicationStatus = async (id, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/applications/${id}/status`, {
+      const response = await fetch(`https://groovix-78ic.onrender.com/api/applications/${id}/status`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -125,7 +125,7 @@ function Admin() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/courses/${id}/seats`, {
+      const response = await fetch(`https://groovix-78ic.onrender.com/api/courses/${id}/seats`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

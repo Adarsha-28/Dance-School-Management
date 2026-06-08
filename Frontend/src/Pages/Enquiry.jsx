@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import logo from "../Assets/Images/logo.png";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 import "../Assets/CSS/Home.css";
 
 function Enquiry() {
@@ -55,7 +55,7 @@ function Enquiry() {
     }
 
     try {
-      const response = await fetch("https://groovix-q6p1.onrender.com/api/enquiries", {
+      const response = await fetch("https://groovix-78ic.onrender.com/api/enquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,24 +94,7 @@ function Enquiry() {
 
   return (
     <div className="page">
-      <header className="navbar">
-        <Link className="brand" to="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </Link>
-
-        <nav className="nav-links">
-          <NavLink to="/">HOME</NavLink>
-          <NavLink to="/about">ABOUT</NavLink>
-          <NavLink to="/courses">COURSES</NavLink>
-          <NavLink to="/contact">CONTACT</NavLink>
-          <NavLink className="btn" to="/signup">
-            JOIN NOW
-          </NavLink>
-        </nav>
-      </header>
+      <Navbar />
 
       <main className="auth-wrap">
         <form className="form-box wide" onSubmit={handleSubmit}>

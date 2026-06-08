@@ -14,23 +14,67 @@ Dance_Management/
 
 ---
 
-## 🛠️ Tech Stack — MERN
 
-![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
-![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
-![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+## Features
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| **M** — Database | MongoDB + Mongoose | NoSQL database & object modeling |
-| **E** — Backend | Express.js | REST API web framework |
-| **R** — Frontend | React 19 + React Router v7 | UI framework & client-side routing |
-| **N** — Runtime | Node.js | JavaScript server runtime |
+### Student Features
+
+* User Registration (Signup)
+* Secure Login System
+* Forgot Password Page
+* Browse Dance Courses
+* Submit Course Enquiries
+* Apply for Admission
+* View Academy Information
+* Contact Academy Team
+
+### Academy Features
+
+* Course Management
+* Student Registration Management
+* Enquiry Tracking
+* Application Tracking
+* Batch Information Management
+* Student Statistics Dashboard
+
+### Informational Pages
+
+* Home Page
+* About Us
+* Contact Us
+* FAQ Page
+* Privacy Policy
+* Terms and Conditions
+
+### Admin Dashboard
+
+* View Student Statistics
+* Manage Applications
+* Manage Enquiries
+* View Batch Information
+* Academy Overview Dashboard
 
 ---
 
-## ✨ Features
+## Technologies Used
+
+### Frontend
+
+* React.js
+* React Router DOM
+* HTML5
+* CSS3
+* JavaScript (ES6)
+
+### Development Tools
+
+* Visual Studio Code
+* Git
+* GitHub
+* Node.js
+* npm
+
+---
 
 - 🔐 **User Authentication** — Register, login, forgot password with JWT-based auth
 - 👤 **Student Profile** — View and manage personal profile

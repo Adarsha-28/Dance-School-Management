@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../Assets/Images/logo.png";
+import Navbar from "../Components/Navbar";
 import "../Assets/CSS/Home.css";
 
 function Contact() {
@@ -53,7 +53,7 @@ function Contact() {
     }
 
     try {
-      const response = await fetch("https://groovix-q6p1.onrendr.com/api/enquiries", {
+      const response = await fetch("https://groovix-78ic.onrender.com/api/enquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,26 +92,7 @@ function Contact() {
 
   return (
     <div className="page">
-      <header className="navbar">
-        <Link className="brand" to="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </Link>
-
-        <nav className="nav-links">
-          <Link to="/">HOME</Link>
-          <Link to="/about">ABOUT</Link>
-          <Link to="/courses">COURSES</Link>
-          <Link className="active" to="/contact">
-            CONTACT
-          </Link>
-          <Link className="btn" to="/signup">
-            JOIN NOW
-          </Link>
-        </nav>
-      </header>
+      <Navbar />
 
       <main className="contact-page">
         <div className="contact-header">

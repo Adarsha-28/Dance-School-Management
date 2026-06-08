@@ -1,25 +1,24 @@
-const express = require("express");
-const cors = require("cors");
+// ─── 1. Load Environment Variables FIRST (before anything else) ──────────────
 const dotenv = require("dotenv");
-const connectDB = async () => {
-  // DB connection logic is imported below
-};
-
-// Load environment variables
 dotenv.config();
 
-// Connect to Database
+// ─── 2. Connect to Database ───────────────────────────────────────────────────
 const dbConnect = require("./config/db");
 dbConnect();
 
+// ─── 3. Core Dependencies ─────────────────────────────────────────────────────
+const express = require("express");
+const cors = require("cors");
+
+// ─── 4. Initialize Express App ────────────────────────────────────────────────
 const app = express();
 
-// Middleware
-app.use(cors()); // Enable CORS for all origins
+// ─── 5. Middleware ────────────────────────────────────────────────────────────
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Routes
+// ─── 6. API Routes ────────────────────────────────────────────────────────────
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/courses", require("./routes/courses"));
 app.use("/api/applications", require("./routes/applications"));
@@ -27,12 +26,12 @@ app.use("/api/feedback", require("./routes/feedback"));
 app.use("/api/enquiries", require("./routes/enquiries"));
 app.use("/api/admin", require("./routes/admin"));
 
-// Welcome route
+// ─── 7. Root Health Check Route ───────────────────────────────────────────────
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the Dance Academy Management System API" });
 });
 
-// Error handling middleware
+// ─── 8. Global Error Handler ──────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode).json({
@@ -41,10 +40,11 @@ app.use((err, req, res, next) => {
   });
 });
 
+// ─── 9. Start Server ──────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`✅ Server is running on port ${PORT}`);
 });
 
 server.on("error", (err) => {

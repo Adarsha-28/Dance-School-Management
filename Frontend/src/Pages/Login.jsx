@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "../Assets/CSS/Home.css";
 import logo from "../Assets/Images/logo.png";
+import Navbar from "../Components/Navbar";
 
 function Login() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ function Login() {
     }
 
     try {
-      const response = await fetch("https://groovix-q6p1.onrender.com/api/auth/login", {
+      const response = await fetch("https://groovix-78ic.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,36 +89,7 @@ function Login() {
 
   return (
     <div className="page">
-      <header className="navbar">
-        <Link className="brand" to="/">
-          <img src={logo} alt="Dance Academy logo" />
-          <strong>
-            DANCE <span>ACADEMY</span>
-          </strong>
-        </Link>
-
-        <nav className="nav-links">
-          <NavLink to="/" end>
-            HOME
-          </NavLink>
-
-          <NavLink to="/about">
-            ABOUT
-          </NavLink>
-
-          <NavLink to="/courses">
-            COURSES
-          </NavLink>
-
-          <NavLink to="/contact">
-            CONTACT
-          </NavLink>
-
-          <Link className="btn" to="/signup">
-            JOIN NOW
-          </Link>
-        </nav>
-      </header>
+      <Navbar />
 
       <main className="auth-wrap">
         <form className="form-box" onSubmit={handleSubmit}>

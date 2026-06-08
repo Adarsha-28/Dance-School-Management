@@ -23,7 +23,7 @@ function Profile() {
     const fetchProfileData = async () => {
       try {
         // Fetch User Details from backend
-        const userRes = await fetch("http://localhost:5000/api/auth/me", {
+        const userRes = await fetch("https://groovix-78ic.onrender.com/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -37,7 +37,7 @@ function Profile() {
         setUser(userData);
 
         // Fetch Applications from backend
-        const appsRes = await fetch("http://localhost:5000/api/applications/my", {
+        const appsRes = await fetch("https://groovix-78ic.onrender.com/api/applications/my", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
