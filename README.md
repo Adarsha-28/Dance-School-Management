@@ -115,8 +115,6 @@ Backend/
 │   ├── feedback.js              # /api/feedback
 │   ├── enquiries.js             # /api/enquiries
 │   └── admin.js                 # /api/admin
-├── scripts/
-│   └── seed.js                  # Database seeding script
 ├── .env                         # Environment variables (not committed)
 ├── .gitignore
 └── server.js                    # App entry point
@@ -145,7 +143,7 @@ Frontend/
 ├── public/
 └── src/
     ├── Assets/           # Images and static assets
-    ├── Components/       # Reusable UI components
+    ├── Components/       # Reusable UI components (including AdminSidebar)
     ├── Pages/
     │   ├── Homepage.jsx
     │   ├── Login.jsx
@@ -156,13 +154,20 @@ Frontend/
     │   ├── Application.jsx
     │   ├── Feedback.jsx
     │   ├── Enquiry.jsx
-    │   ├── Admin.jsx
+    │   ├── AdminDashboard.jsx
+    │   ├── AdminJoinedStudents.jsx
+    │   ├── AdminCourses.jsx
+    │   ├── AdminApplications.jsx
+    │   ├── AdminBatches.jsx
+    │   ├── AdminFeedback.jsx
+    │   ├── AdminAdmins.jsx
     │   ├── Aboutpage.jsx
     │   ├── Contact.jsx
     │   ├── FAQ.jsx
     │   ├── PrivacyPolicy.jsx
     │   └── TermsConditions.jsx
     ├── Routers/          # Route definitions
+    ├── utils/            # Helper utilities (including api.js)
     ├── App.js
     └── index.js
 ```
@@ -204,12 +209,6 @@ JWT_SECRET=your_jwt_secret_key
 ```
 
 > ⚠️ Never commit your `.env` file. It is already listed in `.gitignore`.
-
-**Seed the database (optional):**
-
-```bash
-npm run seed
-```
 
 **Start the backend server:**
 
@@ -255,7 +254,6 @@ The frontend runs at: `http://localhost:3000`
 |---|---|
 | `npm start` | Start server in production mode |
 | `npm run dev` | Start server with nodemon (auto-reload) |
-| `npm run seed` | Seed the database with sample data |
 
 ### Frontend (`/Frontend`)
 
