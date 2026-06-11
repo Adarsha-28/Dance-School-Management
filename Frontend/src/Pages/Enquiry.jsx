@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import "../Assets/CSS/Home.css";
 import { getApiUrl } from "../utils/api";
 
@@ -229,6 +230,7 @@ function Enquiry() {
           )}
         </form>
       </main>
+      <Footer />
     </div>
   );
 }

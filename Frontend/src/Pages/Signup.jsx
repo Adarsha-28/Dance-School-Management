@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "../Assets/CSS/Home.css";
 import logo from "../Assets/Images/logo.png";
-import Navbar from "../Components/Navbar";
 import { getApiUrl } from "../utils/api";
 
 function Signup() {
@@ -105,7 +104,6 @@ function Signup() {
 
   return (
     <div className="page">
-      <Navbar />
 
       <main className="auth-wrap">
         <form className="form-box" onSubmit={handleSubmit}>

@@ -3,8 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "../Assets/CSS/Home.css";
 import logo from "../Assets/Images/logo.png";
-import Navbar from "../Components/Navbar";
-import { getApiUrl } from "../utils/api";
 
 function Login() {
   const navigate = useNavigate();
@@ -42,7 +40,7 @@ function Login() {
     }
 
     try {
-      const response = await fetch(getApiUrl("api/auth/login"), {
+      const response = await fetch("https://groovix-78ic.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +88,6 @@ function Login() {
 
   return (
     <div className="page">
-      <Navbar />
 
       <main className="auth-wrap">
         <form className="form-box" onSubmit={handleSubmit}>
@@ -161,9 +158,7 @@ function Login() {
             <Link to="/forgot-password" style={{ textDecoration: "underline" }}>
               Forgot password?
             </Link>
-            <Link to="/signup" style={{ textDecoration: "underline" }}>
-              New user
-            </Link>
+
           </div>
         </form>
       </main>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Assets/CSS/Home.css";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import { getApiUrl } from "../utils/api";
 
 function Feedback() {
@@ -167,6 +168,7 @@ function Feedback() {
           )}
         </form>
       </main>
+      <Footer />
     </div>
   );
 }

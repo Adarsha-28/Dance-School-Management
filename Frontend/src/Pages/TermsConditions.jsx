@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import "../Assets/CSS/Home.css";
 
 function TermsConditions() {
@@ -75,6 +76,7 @@ function TermsConditions() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

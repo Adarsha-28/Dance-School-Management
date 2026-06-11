@@ -274,7 +274,3 @@ The frontend runs at: `http://localhost:3000`
 5. Open a Pull Request
 
 ---
-
-## 📜 License
-
-This project is for educational purposes. All rights reserved.

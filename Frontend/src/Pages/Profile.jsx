@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import "../Assets/CSS/Home.css";
 import "../Assets/CSS/Profile.css";
 import { getApiUrl } from "../utils/api";
@@ -546,6 +547,7 @@ function Profile() {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 }

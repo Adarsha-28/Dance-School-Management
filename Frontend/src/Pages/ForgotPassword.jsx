@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Navbar";
 import "../Assets/CSS/Home.css";
 
 function ForgotPassword() {
@@ -20,7 +19,6 @@ function ForgotPassword() {
 
   return (
     <div className="page">
-      <Navbar />
 
       <main className="auth-wrap">
         <form className="form-box" onSubmit={handleSubmit}>

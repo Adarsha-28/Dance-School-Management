@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../Assets/CSS/Home.css";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import danceClassImg from "../Assets/Images/about_dance_class.png";
 
 function Aboutpage() {
@@ -99,6 +100,7 @@ function Aboutpage() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }
