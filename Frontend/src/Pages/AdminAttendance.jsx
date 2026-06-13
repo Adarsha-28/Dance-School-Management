@@ -296,6 +296,108 @@ function AdminAttendance() {
     }
   };
 
+  const handleGeneratePDF = async () => {
+    const activeBatch = batches.find((b) => b._id === selectedBatch);
+    const batchName = activeBatch ? `${activeBatch.name} (${activeBatch.timing})` : "N/A";
+
+    const presentStudents = batchStudents.filter(
+      (s) => s.studentId && localStatuses[s.studentId] === "Present"
+    );
+
+    if (presentStudents.length === 0) {
+      triggerNotification("No students marked as Present to export.", "error");
+      return;
+    }
+
+    try {
+      if (!window.jspdf) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+      }
+
+      if (!window.jspdf.plugin) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const primaryColor = [217, 70, 239];
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      doc.text("GROOVIX DANCE ACADEMY", 105, 20, { align: "center" });
+
+      doc.setFontSize(14);
+      doc.setTextColor(80, 80, 80);
+      doc.text("Daily Present Students Roster", 105, 28, { align: "center" });
+
+      doc.setDrawColor(220, 220, 220);
+      doc.line(15, 33, 195, 33);
+
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(50, 50, 50);
+      doc.text(`Date: ${selectedDate}`, 15, 42);
+      doc.text(`Batch: ${batchName}`, 15, 48);
+      doc.text(`Total Present: ${presentStudents.length} / ${batchStudents.length}`, 195, 42, { align: "right" });
+
+      const tableHeaders = [["S.No", "Student Name", "Course", "Email", "Phone"]];
+      const tableData = presentStudents.map((s, idx) => [
+        idx + 1,
+        s.name,
+        s.course,
+        s.email,
+        s.phone || "N/A"
+      ]);
+
+      doc.autoTable({
+        startY: 55,
+        head: tableHeaders,
+        body: tableData,
+        theme: "striped",
+        headStyles: {
+          fillColor: primaryColor,
+          textColor: [255, 255, 255],
+          fontSize: 10,
+          fontStyle: "bold"
+        },
+        bodyStyles: {
+          fontSize: 9,
+          textColor: [33, 33, 33]
+        },
+        alternateRowStyles: {
+          fillColor: [253, 244, 255]
+        },
+        margin: { left: 15, right: 15 }
+      });
+
+      const finalY = doc.lastAutoTable.finalY || 100;
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text("Verified By:", 15, finalY + 30);
+      doc.line(15, finalY + 42, 70, finalY + 42);
+      doc.text("Instructor / Admin Signature", 15, finalY + 47);
+
+      doc.save(`Attendance_Report_${selectedDate}_${activeBatch ? activeBatch.name : "Batch"}.pdf`);
+      triggerNotification("PDF report generated successfully!", "success");
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+      triggerNotification("Error generating PDF document.", "error");
+    }
+  };
+
   // Edit individual record status from history table
   const handleEditHistoryStatus = async (recordId, newStatus) => {
     try {
@@ -477,6 +579,24 @@ function AdminAttendance() {
                   {qrLoading ? "Generating..." : "📱 Daily QR"}
                 </button>
               </div>
+              <button
+                className="btn secondary"
+                onClick={handleGeneratePDF}
+                disabled={batchStudents.length === 0}
+                style={{
+                  width: "100%",
+                  marginTop: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "5px",
+                  background: "rgba(217, 70, 239, 0.15)",
+                  border: "1px solid rgba(217, 70, 239, 0.4)",
+                  color: "#d946ef"
+                }}
+              >
+                📄 Export Present Roster PDF
+              </button>
             </div>
 
             {/* Student Mark Roster */}
