@@ -29,6 +29,7 @@ app.use("/api/feedback", require("./routes/feedback"));
 app.use("/api/enquiries", require("./routes/enquiries"));
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/users", require("./routes/users"));
+app.use("/api/attendance", require("./routes/attendance"));
 
 // ─── 7. Root Health Check Route ───────────────────────────────────────────────
 app.get("/", (req, res) => {

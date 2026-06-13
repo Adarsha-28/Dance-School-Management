@@ -220,6 +220,12 @@ function Profile() {
                 GO TO ADMIN PANEL
               </Link>
             )}
+
+            {user?.role === "student" && (
+              <Link to="/profile/attendance" className="btn" style={{ marginTop: "15px", display: "block", textAlign: "center" }}>
+                📊 VIEW ATTENDANCE
+              </Link>
+            )}
           </section>
 
           {/* Applications History */}

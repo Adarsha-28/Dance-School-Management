@@ -21,6 +21,8 @@ import AdminCourses from "../Pages/AdminCourses";
 import AdminBatches from "../Pages/AdminBatches";
 import Profile from "../Pages/Profile";
 import Enquiry from "../Pages/Enquiry";
+import AdminAttendance from "../Pages/AdminAttendance";
+import StudentAttendance from "../Pages/StudentAttendance";
 
 function AppRoutes() {
   return (
@@ -46,7 +48,9 @@ function AppRoutes() {
       <Route path="/admin/feedback" element={<AdminFeedback />} />
       <Route path="/admin/courses" element={<AdminCourses />} />
       <Route path="/admin/batches" element={<AdminBatches />} />
+      <Route path="/admin/attendance" element={<AdminAttendance />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/attendance" element={<StudentAttendance />} />
     </Routes>
   );
 }

@@ -15,6 +15,14 @@ const batchSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    activeCode: {
+      type: String,
+      default: null,
+    },
+    codeExpiresAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

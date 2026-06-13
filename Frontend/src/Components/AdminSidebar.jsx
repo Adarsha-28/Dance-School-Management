@@ -57,6 +57,12 @@ function AdminSidebar({ active }) {
         >
           Batches
         </Link>
+        <Link 
+          to="/admin/attendance" 
+          className={active === "attendance" ? "active" : ""}
+        >
+          Attendance
+        </Link>
       </nav>
 
       <div style={{ marginTop: "auto", paddingTop: "30px", display: "flex", flexDirection: "column", gap: "10px" }}>

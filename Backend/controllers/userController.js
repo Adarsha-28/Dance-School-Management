@@ -22,7 +22,7 @@ const updateUserRole = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (!["student", "admin"].includes(role)) {
+    if (!["student", "admin", "instructor"].includes(role)) {
       return res.status(400).json({ message: "Invalid role value" });
     }
 
